@@ -1,5 +1,5 @@
-import additional.Process;
-import additional.*;
+import core.Process;
+import core.*;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ public class SimModel {
 
     public static void main(String[] args) {
         Create c = new Create(2.0);
-        additional.Process p = new Process(1.0);
+        core.Process p = new Process(1.0);
         c.setName("CREATOR");
         p.setName("PROCESSOR");
         p.setMaxqueue(5);

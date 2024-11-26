@@ -1,4 +1,4 @@
-package additional;
+package core;
 
 public enum Distribution {
     EXP, NORM, UNIF, UNKNOWN;

@@ -1,4 +1,4 @@
-package additional;
+package core;
 
 public class Element {
     private static int nextId = 0;
@@ -60,7 +60,7 @@ public class Element {
             case UNIF -> delay = FunRand.Unif(getDelayMean(), getDelayDev());
             case UNKNOWN -> delay = getDelayMean();
         }
-       
+
         return delay;
     }
 

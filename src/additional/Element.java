@@ -6,7 +6,7 @@ public class Element {
     private double tnext;
     private double delayMean;
     private double delayDev;
-    private String distribution;
+    private Distribution distribution;
     private int quantity;
     private double tcurr;
     private int state;
@@ -16,7 +16,7 @@ public class Element {
     public Element() {
         tnext = 0.0;
         delayMean = 1.0;
-        distribution = "exp";
+        distribution = Distribution.EXP;
         tcurr = tnext;
         state = 0;
         nextElement = null;
@@ -29,7 +29,7 @@ public class Element {
         name = "anonymus";
         tnext = 0.0;
         delayMean = delay;
-        distribution = "";
+        distribution = Distribution.UNKNOWN;
         tcurr = tnext;
         state = 0;
         nextElement = null;
@@ -42,7 +42,7 @@ public class Element {
         name = nameOfElement;
         tnext = 0.0;
         delayMean = delay;
-        distribution = "exp";
+        distribution = Distribution.EXP;
         tcurr = tnext;
         state = 0;
         nextElement = null;
@@ -53,21 +53,14 @@ public class Element {
 
     public double getDelay() {
         double delay = getDelayMean();
-        if ("exp".equalsIgnoreCase(getDistribution())) {
-            delay = FunRand.Exp(getDelayMean());
-        } else {
-            if ("norm".equalsIgnoreCase(getDistribution())) {
-                delay = FunRand.Norm(getDelayMean(),
-                        getDelayDev());
-            } else {
-                if ("unif".equalsIgnoreCase(getDistribution())) {
-                    delay = FunRand.Unif(getDelayMean(), getDelayDev());
-                } else {
-                    if ("".equalsIgnoreCase(getDistribution()))
-                        delay = getDelayMean();
-                }
-            }
+
+        switch (getDistribution()) {
+            case EXP -> delay = FunRand.Exp(getDelayMean());
+            case NORM -> delay = FunRand.Norm(getDelayMean(), getDelayDev());
+            case UNIF -> delay = FunRand.Unif(getDelayMean(), getDelayDev());
+            case UNKNOWN -> delay = getDelayMean();
         }
+       
         return delay;
     }
 
@@ -80,11 +73,11 @@ public class Element {
         this.delayDev = delayDev;
     }
 
-    public String getDistribution() {
+    public Distribution getDistribution() {
         return distribution;
     }
 
-    public void setDistribution(String distribution) {
+    public void setDistribution(Distribution distribution) {
         this.distribution = distribution;
     }
 

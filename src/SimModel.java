@@ -1,7 +1,5 @@
-import additional.Create;
-import additional.Element;
-import additional.Model;
 import additional.Process;
+import additional.*;
 
 import java.util.ArrayList;
 
@@ -14,8 +12,8 @@ public class SimModel {
         c.setName("CREATOR");
         p.setName("PROCESSOR");
         p.setMaxqueue(5);
-        c.setDistribution("exp");
-        p.setDistribution("exp");
+        c.setDistribution(Distribution.EXP);
+        p.setDistribution(Distribution.EXP);
 
         ArrayList<Element> list = new ArrayList<>();
         list.add(c);

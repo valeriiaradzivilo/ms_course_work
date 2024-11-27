@@ -17,7 +17,7 @@ public class SimModel {
         Process comp1Search = new Process("Пошук на 1 комп'ютері", 18, Distribution.NORM, 2);
         comp1Search.setMaxqueue(1);
 
-        Process transmission = new Process(2); // я не розумію який тут розподіл і чи він є
+        Process transmission = new Process("Передача по каналу зв'язку", 2); // я не розумію який тут розподіл і чи він є
         transmission.setMaxqueue(1);
         Process comp2Processing = new Process("Обробка на 2 комп'ютері", 2); // я не розумію який тут розподіл і чи він є
         comp2Processing.setMaxqueue(1);

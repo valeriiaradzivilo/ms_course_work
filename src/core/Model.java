@@ -38,10 +38,10 @@ public class Model {
                     e.outAct();
                 }
             }
+            printInfo();
         }
         printResult();
         eventCount++;
-//        System.out.println("Event count: " + eventCount);
         System.out.println("___________");
     }
 

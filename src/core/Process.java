@@ -1,5 +1,7 @@
 package core;
 
+import core.type.Distribution;
+
 public class Process extends Element {
 
     private int queue, maxqueue, failure;
@@ -11,7 +13,14 @@ public class Process extends Element {
         maxqueue = Integer.MAX_VALUE;
         meanQueue = 0.0;
     }
-    
+
+    public Process(double delay, Distribution distribution, double deviation) {
+        super(delay, distribution, deviation);
+        queue = 0;
+        maxqueue = Integer.MAX_VALUE;
+        meanQueue = 0.0;
+    }
+
 
     @Override
     public void inAct() {

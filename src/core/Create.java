@@ -1,5 +1,7 @@
 package core;
 
+import core.type.Distribution;
+
 public class Create extends Element {
 
     public Create(double delay) {

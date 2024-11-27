@@ -1,7 +1,15 @@
 package core;
 
+import core.type.Distribution;
+import core.type.Routing;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 public class Element {
     private static int nextId = 0;
+    private final ArrayList<Route> routes = new ArrayList<>();
     private String name;
     private double tnext;
     private double delayMean;
@@ -12,6 +20,7 @@ public class Element {
     private int state;
     private Element nextElement;
     private int id;
+    private Routing routing;
 
     public Element() {
         tnext = 0.0;
@@ -77,6 +86,19 @@ public class Element {
         name = "element" + id;
     }
 
+    public Element(double delay, Distribution distribution) {
+        name = "anonymus";
+        tnext = 0.0;
+        delayMean = delay;
+        this.distribution = distribution;
+        tcurr = tnext;
+        state = 0;
+        nextElement = null;
+        id = nextId;
+        nextId++;
+        name = "element" + id;
+    }
+
     public double getDelay() {
         double delay = getDelayMean();
 
@@ -97,6 +119,10 @@ public class Element {
 
     public void setDelayDev(double delayDev) {
         this.delayDev = delayDev;
+    }
+
+    public void setRouting(Routing routing) {
+        this.routing = routing;
     }
 
     public Distribution getDistribution() {
@@ -199,5 +225,15 @@ public class Element {
         if (FunRand.Unif(0, 1) < probability) {
             this.nextElement = element;
         }
+    }
+
+    public void addRoutes(Route... routes) {
+        this.routes.addAll(List.of(routes));
+        if (routing == Routing.BY_PRIORITY) {
+            this.routes.sort(Comparator.comparingInt(Route::getPriority).reversed());
+        } else {
+            this.routes.sort(Comparator.comparingDouble(Route::getProbability).reversed());
+        }
+
     }
 }

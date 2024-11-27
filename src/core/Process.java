@@ -11,6 +11,7 @@ public class Process extends Element {
         maxqueue = Integer.MAX_VALUE;
         meanQueue = 0.0;
     }
+    
 
     @Override
     public void inAct() {

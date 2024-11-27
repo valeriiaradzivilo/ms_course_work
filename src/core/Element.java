@@ -38,11 +38,37 @@ public class Element {
         name = "element" + id;
     }
 
+    public Element(String name) {
+        this.name = name;
+        tnext = 0.0;
+        delayMean = 1.0;
+        distribution = Distribution.UNKNOWN;
+        tcurr = tnext;
+        state = 0;
+        nextElement = null;
+        id = nextId;
+        nextId++;
+    }
+
     public Element(String nameOfElement, double delay) {
         name = nameOfElement;
         tnext = 0.0;
         delayMean = delay;
         distribution = Distribution.EXP;
+        tcurr = tnext;
+        state = 0;
+        nextElement = null;
+        id = nextId;
+        nextId++;
+        name = "element" + id;
+    }
+
+    public Element(double delay, Distribution distribution, double deviation) {
+        name = "anonymus";
+        tnext = 0.0;
+        delayMean = delay;
+        delayDev = deviation;
+        this.distribution = distribution;
         tcurr = tnext;
         state = 0;
         nextElement = null;
@@ -127,6 +153,9 @@ public class Element {
 
 
     public void inAct() {
+    }
+
+    public void inAct(Job job) {
     }
 
     public void outAct() {

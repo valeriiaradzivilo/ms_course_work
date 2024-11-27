@@ -6,6 +6,10 @@ public class Create extends Element {
         super(delay);
     }
 
+    public Create(double delay, Distribution distribution, double deviation) {
+        super(delay, distribution, deviation);
+    }
+
     @Override
     public void outAct() {
         super.outAct();

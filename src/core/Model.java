@@ -97,19 +97,20 @@ public class Model {
 
             if (element instanceof Process) {
                 Process process = (Process) element;
-                double processQueueMean = process.getMeanQueueAmount() / timeCurrent;
-                totalFailures += process.getFailuresCount();
-                double failureProbability = process.getProcessedTimes() + process.getFailuresCount() > 0
-                        ? (double) process.getFailuresCount() / (process.getProcessedTimes() + process.getFailuresCount())
-                        : 0;
-                double avgProcessTime = process.getTotalProcessTime() / modelingTime;
-                double avgWorkerProcessTime = avgProcessTime / process.getChannels().size();
+                double processQueueMean = process.getMeanQueue() / timeCurrent;
+                totalFailures += process.getFailure();
+//                double failureProbability = process.t() + process.getFailure() > 0
+//                        ? (double) process.getFailuresCount() / (process.getProcessedTimes() + process.getFailuresCount())
+//                        : 0;
+//                double avgProcessTime = process.getTotalProcessTime() / modelingTime;
+//                double avgWorkerProcessTime = avgProcessTime / process.getChannels().size();
 
                 System.out.println("Mean length of queue = " + Math.round(processQueueMean * 10000.0) / 10000.0);
-                System.out.println("Failures count = " + process.getFailuresCount());
-                System.out.println("Failure probability = " + Math.round(failureProbability * 10000.0) / 10000.0);
-                System.out.println("Average element process time = " + Math.round(avgProcessTime * 10000.0) / 10000.0);
-                System.out.println("Average worker process time = " + Math.round(avgWorkerProcessTime * 10000.0) / 10000.0);
+                System.out.println("Failure count = " + process.getFailure());
+//                System.out.println("Failures count = " + process.getFailuresCount());
+//                System.out.println("Failure probability = " + Math.round(failureProbability * 10000.0) / 10000.0);
+//                System.out.println("Average element process time = " + Math.round(avgProcessTime * 10000.0) / 10000.0);
+//                System.out.println("Average worker process time = " + Math.round(avgWorkerProcessTime * 10000.0) / 10000.0);
             }
 
             System.out.println();

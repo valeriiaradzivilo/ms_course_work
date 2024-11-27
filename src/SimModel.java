@@ -19,16 +19,16 @@ public class SimModel {
         Process comp1Processing = new Process("Обробка на 1 комп'ютері", 2, Distribution.UNKNOWN);
 
 
-        comp1Processing.setMaxqueue(1);
+//        comp1Processing.setMaxqueue(1);
         Process comp1Search = new Process("Пошук на 1 комп'ютері", 18, Distribution.NORM, 2);
-        comp1Search.setMaxqueue(1);
+//        comp1Search.setMaxqueue(1);
 
         Process transmission = new Process("Передача по каналу зв'язку", 2);
-        transmission.setMaxqueue(1);
+//        transmission.setMaxqueue(1);
         Process comp2Processing = new Process("Обробка на 2 комп'ютері", 2);
-        comp2Processing.setMaxqueue(1);
+//        comp2Processing.setMaxqueue(1);
         Process comp2Search = new Process("Пошук на 2 комп'ютері", 18, Distribution.NORM, 2);
-        comp2Search.setMaxqueue(1);
+//        comp2Search.setMaxqueue(1);
         Dispose dispose = new Dispose("Запит оброблено");
 
 

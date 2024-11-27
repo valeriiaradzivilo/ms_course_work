@@ -1,19 +1,16 @@
 package core;
 
-import core.type.Distribution;
-
 public class Create extends Element {
+    private int failures = 0;
 
-    public Create(double delay) {
-        super(delay);
+    public Create(String name, double delay) {
+        super(name, delay);
+        super.setTnext(0.0);
     }
 
-    public Create(double delay, Distribution distribution, double deviation) {
-        super(delay, distribution, deviation);
-    }
-
-    public Create(String name, double delay, Distribution distribution, double deviation) {
-        super(name, delay, distribution, deviation);
+    public Create(String name, double delay, double initialTNext) {
+        super(name, delay);
+        super.setTnext(initialTNext);
     }
 
     @Override
@@ -22,5 +19,6 @@ public class Create extends Element {
         super.setTnext(super.getTcurr() + super.getDelay());
         super.getNextElement().inAct();
     }
+
 
 }

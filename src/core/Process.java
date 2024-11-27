@@ -14,8 +14,22 @@ public class Process extends Element {
         meanQueue = 0.0;
     }
 
+    public Process(String name, double delay) {
+        super(name, delay);
+        queue = 0;
+        maxqueue = Integer.MAX_VALUE;
+        meanQueue = 0.0;
+    }
+
     public Process(double delay, Distribution distribution, double deviation) {
         super(delay, distribution, deviation);
+        queue = 0;
+        maxqueue = Integer.MAX_VALUE;
+        meanQueue = 0.0;
+    }
+
+    public Process(String name, double delay, Distribution distribution, double deviation) {
+        super(name, delay, distribution, deviation);
         queue = 0;
         maxqueue = Integer.MAX_VALUE;
         meanQueue = 0.0;

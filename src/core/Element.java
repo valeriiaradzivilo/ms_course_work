@@ -35,7 +35,6 @@ public class Element {
     }
 
     public Element(double delay) {
-        name = "anonymus";
         tnext = 0.0;
         delayMean = delay;
         distribution = Distribution.UNKNOWN;
@@ -69,11 +68,10 @@ public class Element {
         nextElement = null;
         id = nextId;
         nextId++;
-        name = "element" + id;
+
     }
 
     public Element(double delay, Distribution distribution, double deviation) {
-        name = "anonymus";
         tnext = 0.0;
         delayMean = delay;
         delayDev = deviation;
@@ -86,8 +84,21 @@ public class Element {
         name = "element" + id;
     }
 
+    public Element(String name, double delay, Distribution distribution, double deviation) {
+        this.name = name;
+        tnext = 0.0;
+        delayMean = delay;
+        delayDev = deviation;
+        this.distribution = distribution;
+        tcurr = tnext;
+        state = 0;
+        nextElement = null;
+        id = nextId;
+        nextId++;
+
+    }
+
     public Element(double delay, Distribution distribution) {
-        name = "anonymus";
         tnext = 0.0;
         delayMean = delay;
         this.distribution = distribution;

@@ -65,7 +65,9 @@ public class Model {
             if (element instanceof Process p) {
                 System.out.println("Mean Queue = " + formatter.format(p.getMeanQueue() / tcurr));
                 System.out.println("Mean Workload = " + formatter.format(p.getWorkTime() / tcurr));
+                System.out.println("Queue leftovers = " + p.getQueueSize());
                 System.out.println("Failure Probability = " + formatter.format(p.getFailures() / (double) (p.getQuantity() + p.getFailures())));
+                System.out.println("_______________________________");
             }
         }
     }

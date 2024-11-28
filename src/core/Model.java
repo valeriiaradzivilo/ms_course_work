@@ -30,7 +30,7 @@ public class Model {
                 }
             }
             updateBlockedElements();
-            System.out.println("\nEvent in " + elements.get(nearestEvent).getName() + ", tNext = " + tnext);
+            System.out.println("\nEvent in " + elements.get(nearestEvent).getName() + ", tnext = " + tnext);
             var delta = tnext - tcurr;
             for (Element element : elements) {
                 element.doStatistics(delta);

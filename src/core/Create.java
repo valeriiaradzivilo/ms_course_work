@@ -5,23 +5,23 @@ public class Create extends Element {
 
     public Create(String name, double delay) {
         super(name, delay);
-        super.setTNext(0.0);
+        super.setTnext(0.0);
     }
 
     public Create(String name, double delay, double initialTNext) {
         super(name, delay);
-        super.setTNext(initialTNext);
+        super.setTnext(initialTNext);
     }
 
     public Create(String name, double delay, double delayDev, double initialTNext) {
         super(name, delay, delayDev);
-        super.setTNext(initialTNext);
+        super.setTnext(initialTNext);
     }
 
     @Override
     public void outAct() {
         super.outAct();
-        super.setTNext(super.getTCurr() + super.getDelay());
+        super.setTnext(super.getTcurr() + super.getDelay());
         var createdJob = createJob();
         var nextRoute = super.getNextRoute(createdJob);
         if (nextRoute.getElement() == null || nextRoute.isBlocked(createdJob)) {
@@ -32,6 +32,6 @@ public class Create extends Element {
     }
 
     protected Job createJob() {
-        return new Job(super.getTCurr());
+        return new Job(super.getTcurr());
     }
 }

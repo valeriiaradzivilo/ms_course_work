@@ -11,8 +11,8 @@ public class Element {
     private final String name;
     private Routing routing = Routing.BY_PRIORITY;
     private Distribution distribution;
-    private double tNext;
-    private double tCurr;
+    private double tnext;
+    private double tcurr;
     private double delayMean;
     private double delayDev;
     private int quantity = 0;
@@ -20,8 +20,8 @@ public class Element {
 
     public Element(String name) {
         this.name = name;
-        tNext = Double.MAX_VALUE;
-        tCurr = tNext;
+        tnext = Double.MAX_VALUE;
+        tcurr = tnext;
         delayMean = 1.0;
         distribution = Distribution.NONE;
         id = nextId;
@@ -30,8 +30,8 @@ public class Element {
 
     public Element(String name, double delayMean) {
         this.name = name;
-        tNext = 0.0;
-        tCurr = tNext;
+        tnext = 0.0;
+        tcurr = tnext;
         this.delayMean = delayMean;
         distribution = Distribution.EXPONENTIAL;
         id = nextId;
@@ -40,8 +40,8 @@ public class Element {
 
     public Element(String name, double delayMean, double delayDev) {
         this.name = name;
-        tNext = 0.0;
-        tCurr = tNext;
+        tnext = 0.0;
+        tcurr = tnext;
         this.delayMean = delayMean;
         this.delayDev = delayDev;
         distribution = Distribution.NORMAL;
@@ -51,10 +51,9 @@ public class Element {
 
     public Element(String name, double delayMean, Distribution distribution) {
         this.name = name;
-        tNext = 0.0;
-        tCurr = tNext;
+        tnext = 0.0;
+        tcurr = tnext;
         this.delayMean = delayMean;
-        this.delayDev = delayDev;
         this.distribution = distribution;
         id = nextId;
         nextId++;
@@ -90,7 +89,6 @@ public class Element {
             case EXPONENTIAL -> FunRand.Exponential(delayMean);
             case UNIFORM -> FunRand.Uniform(delayMean, delayDev);
             case NORMAL -> FunRand.Normal(delayMean, delayDev);
-            case ERLANG -> FunRand.Erlang(delayMean, delayDev);
             default -> delayMean;
         };
     }
@@ -124,7 +122,7 @@ public class Element {
     }
 
     public Route getNextRoute(Job routedJob) {
-        if (routes.size() == 0) {
+        if (routes.isEmpty()) {
             return new Route(null);
         }
         return switch (routing) {
@@ -136,7 +134,7 @@ public class Element {
 
     private Route getNextRouteByProbability(Job routedJob) {
         var unblockedRoutes = getUnblockedRoutes(routes, routedJob);
-        if (unblockedRoutes.size() == 0) {
+        if (unblockedRoutes.isEmpty()) {
             return routes.get(0);
         }
         var probability = Math.random();
@@ -151,7 +149,7 @@ public class Element {
 
     private Route getNextRouteByPriority(Job routedJob) {
         var unblockedRoutes = getUnblockedRoutes(routes, routedJob);
-        if (unblockedRoutes.size() == 0) {
+        if (unblockedRoutes.isEmpty()) {
             return routes.get(0);
         }
         return unblockedRoutes.get(0);
@@ -203,20 +201,20 @@ public class Element {
         quantity++;
     }
 
-    public double getTNext() {
-        return tNext;
+    public double getTnext() {
+        return tnext;
     }
 
-    public void setTNext(double tNext) {
-        this.tNext = tNext;
+    public void setTnext(double tNext) {
+        this.tnext = tNext;
     }
 
-    public double getTCurr() {
-        return tCurr;
+    public double getTcurr() {
+        return tcurr;
     }
 
-    public void setTCurr(double tCurr) {
-        this.tCurr = tCurr;
+    public void setTcurr(double tCurr) {
+        this.tcurr = tCurr;
     }
 
     public int getState() {
@@ -232,7 +230,7 @@ public class Element {
     }
 
     public void printInfo() {
-        System.out.println(name + " state = " + getState() + " quantity = " + getQuantity() + " tnext = " + getTNext());
+        System.out.println(name + " state = " + getState() + " quantity = " + getQuantity() + " tnext = " + getTnext());
     }
 
     public void printResult() {

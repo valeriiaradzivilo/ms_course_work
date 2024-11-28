@@ -5,5 +5,4 @@ public enum Distribution {
     EXPONENTIAL,
     UNIFORM,
     NORMAL,
-    ERLANG,
 }

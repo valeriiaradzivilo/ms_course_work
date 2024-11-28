@@ -59,8 +59,7 @@ public class Route {
     public void setBlock(Block block) {
         this.block = block;
     }
-
-    @FunctionalInterface
+    
     public interface Block {
         Boolean call(Job job);
     }

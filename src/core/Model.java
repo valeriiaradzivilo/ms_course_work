@@ -1,45 +1,47 @@
 package core;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Model {
     protected final ArrayList<Element> elements;
-    protected double tCurr;
-    protected double tNext;
+    protected double tcurr;
+    protected double tnext;
     protected int nearestEvent;
-    protected boolean isFirstIteration = true;
 
     public Model(Element... elements) {
         this.elements = new ArrayList<>(Arrays.asList(elements));
-        tNext = 0.0;
-        tCurr = tNext;
+        tnext = 0.0;
+        tcurr = tnext;
         nearestEvent = 0;
     }
 
     public void simulate(double time) {
-        while (tCurr < time) {
-            tNext = Double.MAX_VALUE;
+        boolean isFirstIteration = true;
+
+        while (tcurr < time) {
+            tnext = Double.MAX_VALUE;
             for (var element : elements) {
-                if ((tCurr < element.getTNext() || isFirstIteration) && element.getTNext() < tNext) {
-                    tNext = element.getTNext();
+                if ((tcurr < element.getTnext() || isFirstIteration) && element.getTnext() < tnext) {
+                    tnext = element.getTnext();
                     nearestEvent = element.getId();
                 }
             }
             updateBlockedElements();
-            System.out.println("\nEvent in " + elements.get(nearestEvent).getName() + ", tNext = " + tNext);
-            var delta = tNext - tCurr;
-            doModelStatistics(delta);
+            System.out.println("\nEvent in " + elements.get(nearestEvent).getName() + ", tNext = " + tnext);
+            var delta = tnext - tcurr;
             for (Element element : elements) {
                 element.doStatistics(delta);
             }
-            tCurr = tNext;
+            tcurr = tnext;
             for (var element : elements) {
-                element.setTCurr(tCurr);
+                element.setTcurr(tcurr);
             }
             elements.get(nearestEvent).outAct();
             for (var element : elements) {
-                if (element.getTNext() == tCurr) {
+                if (element.getTnext() == tcurr) {
                     element.outAct();
                 }
             }
@@ -56,25 +58,23 @@ public class Model {
     }
 
     public void printResult() {
+        NumberFormat formatter = new DecimalFormat("#0.0000");
         System.out.println("\n-------------RESULTS-------------");
         for (var element : elements) {
-            System.out.print("-> ");
             element.printResult();
             if (element instanceof Process p) {
-                System.out.println("   Mean Queue = " + p.getMeanQueue() / tCurr);
-                System.out.println("   Mean Workload = " + p.getWorkTime() / tCurr);
-                System.out.println("   Failure Probability = " + p.getFailures() / (double) (p.getQuantity() + p.getFailures()));
+                System.out.println("Mean Queue = " + formatter.format(p.getMeanQueue() / tcurr));
+                System.out.println("Mean Workload = " + formatter.format(p.getWorkTime() / tcurr));
+                System.out.println("Failure Probability = " + formatter.format(p.getFailures() / (double) (p.getQuantity() + p.getFailures())));
             }
         }
     }
 
-    protected void doModelStatistics(double delta) {
-    }
 
     private void updateBlockedElements() {
         for (var element : elements) {
-            if (element.getTNext() <= tCurr) {
-                element.setTNext(tNext);
+            if (element.getTnext() <= tcurr) {
+                element.setTnext(tnext);
             }
         }
     }

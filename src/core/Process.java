@@ -39,7 +39,7 @@ public class Process extends Element {
         jobsNum = Math.min(jobsNum, channels.size());
         for (int i = 0; i < jobsNum; i++) {
             channels.get(i).setCurrentJob(new Job(0.0));
-            channels.get(i).setTNext(super.getTCurr() + super.getDelay());
+            channels.get(i).setTNext(super.getTcurr() + super.getDelay());
         }
     }
 
@@ -55,7 +55,7 @@ public class Process extends Element {
         var freeChannel = getFreeChannel();
         if (freeChannel != null) {
             freeChannel.setCurrentJob(job);
-            freeChannel.setTNext(super.getTCurr() + super.getDelay());
+            freeChannel.setTNext(super.getTcurr() + super.getDelay());
         } else {
             if (queue.size() < getMaxQueueSize()) {
                 queue.add(job);
@@ -82,15 +82,15 @@ public class Process extends Element {
             }
 
             if (nextRoute.getElement() != null) {
-                job.setTimeOut(super.getTCurr());
+                job.setTimeOut(super.getTcurr());
                 nextRoute.getElement().inAct(job);
             }
 
             channel.setCurrentJob(null);
             channel.setTNext(Double.MAX_VALUE);
             changeQuantity(1);
-            totalLeaveTime += super.getTCurr() - previousLeaveTime;
-            previousLeaveTime = super.getTCurr();
+            totalLeaveTime += super.getTcurr() - previousLeaveTime;
+            previousLeaveTime = super.getTcurr();
         }
     }
 
@@ -99,7 +99,7 @@ public class Process extends Element {
         while (!queue.isEmpty() && freeChannel != null) {
             var job = queue.poll();
             freeChannel.setCurrentJob(job);
-            freeChannel.setTNext(super.getTCurr() + super.getDelay());
+            freeChannel.setTNext(super.getTcurr() + super.getDelay());
             freeChannel = getFreeChannel();
         }
     }
@@ -166,7 +166,7 @@ public class Process extends Element {
     }
 
     @Override
-    public double getTNext() {
+    public double getTnext() {
         double tNext = Double.MAX_VALUE;
         for (Channel channel : channels) {
             if (channel.getTNext() < tNext) {
@@ -177,8 +177,8 @@ public class Process extends Element {
     }
 
     @Override
-    public void setTNext(double tNext) {
-        double previousTNext = getTNext();
+    public void setTnext(double tNext) {
+        double previousTNext = getTnext();
         for (Channel channel : channels) {
             if (channel.getTNext() == previousTNext) {
                 channel.setTNext(tNext);
@@ -191,7 +191,7 @@ public class Process extends Element {
         System.out.println(getName() +
                 " state = " + getState() +
                 " quantity = " + getQuantity() +
-                " tnext = " + getTNext() +
+                " tnext = " + getTnext() +
                 " failures = " + failures +
                 " queue size = " + queue.size()
         );
@@ -217,7 +217,7 @@ public class Process extends Element {
             jobs.addAll(queue);
         }
         for (var job : jobs) {
-            job.setTimeOut(super.getTCurr());
+            job.setTimeOut(super.getTcurr());
 
         }
         return jobs;

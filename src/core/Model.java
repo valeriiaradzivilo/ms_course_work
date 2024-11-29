@@ -10,18 +10,28 @@ public class Model {
     protected double tcurr;
     protected double tnext;
     protected int nearestEvent;
+    protected int modelingTime;
 
     public Model(Element... elements) {
         this.elements = new ArrayList<>(Arrays.asList(elements));
         tnext = 0.0;
         tcurr = tnext;
         nearestEvent = 0;
+        modelingTime = 0;
     }
 
-    public void simulate(double time) {
+    public Model(int modelingTime, Element... elements) {
+        this.elements = new ArrayList<>(Arrays.asList(elements));
+        tnext = 0.0;
+        tcurr = tnext;
+        nearestEvent = 0;
+        this.modelingTime = modelingTime;
+    }
+
+    public void simulate() {
         boolean isFirstIteration = true;
 
-        while (tcurr < time) {
+        while (tcurr < modelingTime) {
             tnext = Double.MAX_VALUE;
             for (var element : elements) {
                 if ((tcurr < element.getTnext() || isFirstIteration) && element.getTnext() < tnext) {
@@ -78,6 +88,59 @@ public class Model {
                 element.setTnext(tnext);
             }
         }
+    }
+
+
+    public double calculateTransientPeriod(double epsilon) {
+        double[] cumulativeTime = new double[elements.size()];
+        double[] cumulativeResponse = new double[elements.size()];
+        double[] meanResponse = new double[elements.size()];
+
+        double totalTime = 0.0;
+        double tnext;
+        double tcurr = 0.0;
+
+        while (tcurr < modelingTime) {
+            tnext = Double.MAX_VALUE;
+
+
+            for (Element element : elements) {
+                if (element.getTnext() < tnext) {
+                    tnext = element.getTnext();
+                }
+            }
+
+            double delta = tnext - tcurr;
+            tcurr = tnext;
+            totalTime += delta;
+
+
+            for (int i = 0; i < elements.size(); i++) {
+                Element element = elements.get(i);
+                if (element instanceof Process process) {
+                    cumulativeTime[i] += delta;
+                    cumulativeResponse[i] += process.getQueueSize() * delta;
+                    meanResponse[i] = cumulativeResponse[i] / cumulativeTime[i];
+                }
+            }
+
+
+            for (int i = 0; i < meanResponse.length; i++) {
+                for (int j = i + 1; j < meanResponse.length; j++) {
+                    if (Math.abs(meanResponse[i] - meanResponse[j]) < epsilon) {
+                        return tcurr;
+                    }
+                }
+            }
+
+            for (Element element : elements) {
+                if (element.getTnext() == tcurr) {
+                    element.outAct();
+                }
+            }
+        }
+
+        return -1;
     }
 
 }

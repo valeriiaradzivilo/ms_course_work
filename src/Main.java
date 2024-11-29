@@ -15,32 +15,19 @@ public class Main {
         searchComp1.setDistribution(Distribution.NORMAL);
         searchComp2.setDistribution(Distribution.NORMAL);
 
-
-        create.addRoutes(
-                new Route(processingComp1)
-        );
-        processingComp1.addRoutes(
-                new Route(searchComp1)
-        );
+        create.addRoutes(new Route(processingComp1));
+        processingComp1.addRoutes(new Route(searchComp1));
         searchComp1.addRoutes(
                 new Route(transportation, 0.5, 0),
                 new Route(dispose, 0.5, 0)
         );
         searchComp1.setRouting(Routing.BY_PROBABILITY);
 
-        transportation.addRoutes(
-                new Route(searchComp2)
-        );
+        transportation.addRoutes(new Route(searchComp2));
+        searchComp2.addRoutes(new Route(transportationBack));
+        transportationBack.addRoutes(new Route(dispose));
 
-        searchComp2.addRoutes(
-                new Route(transportationBack)
-        );
-        transportationBack.addRoutes(
-                new Route(dispose)
-        );
-
-
-        Model model = new Model(create,
+        Model model = new Model(1000000, create,
                 processingComp1,
                 searchComp1,
                 transportation,
@@ -48,9 +35,18 @@ public class Main {
                 transportationBack,
                 dispose);
 
-        model.simulate(10000);
+        // Виконання моделювання
+        model.simulate();
 
-
+//        // Обчислення перехідного періоду
+//        double epsilon = 0.01;
+//        double transientPeriod = model.calculateTransientPeriod(epsilon);
+//
+//        if (transientPeriod > 0) {
+//            System.out.println("Перехідний період закінчується на моменті часу T = " + transientPeriod);
+//        } else {
+//            System.out.println("Сталий стан системи не досягається протягом заданого часу моделювання.");
+//        }
     }
 
 

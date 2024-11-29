@@ -72,7 +72,6 @@ public class Model {
         }
     }
 
-
     private void updateBlockedElements() {
         for (var element : elements) {
             if (element.getTnext() <= tcurr) {

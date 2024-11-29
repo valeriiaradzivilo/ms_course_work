@@ -7,8 +7,8 @@ public class Main {
         Process processingComp1 = new Process("Request processing on computer 1", 2, 1, Distribution.NONE);
         Process searchComp1 = new Process("Search on computer 1", 18, 2, 1);
         Process transportation = new Process("Transportation", 3, 1, Distribution.NONE);
-        Process processingComp2 = new Process("Request processing on computer 2", 2, 1, Distribution.NONE);
         Process searchComp2 = new Process("Search on computer 2", 18, 2, 1);
+        Process transportationBack = new Process("Transportation back", 3, 1, Distribution.NONE);
         Dispose dispose = new Dispose("Request ended");
 
         create.setDistribution(Distribution.NORMAL);
@@ -28,12 +28,13 @@ public class Main {
         );
         searchComp1.setRouting(Routing.BY_PROBABILITY);
         transportation.addRoutes(
-                new Route(processingComp2)
-        );
-        processingComp2.addRoutes(
                 new Route(searchComp2)
         );
+
         searchComp2.addRoutes(
+                new Route(transportationBack)
+        );
+        transportationBack.addRoutes(
                 new Route(dispose)
         );
 
@@ -42,8 +43,8 @@ public class Main {
                 processingComp1,
                 searchComp1,
                 transportation,
-                processingComp2,
                 searchComp2,
+                transportationBack,
                 dispose);
 
         model.simulate(1000);

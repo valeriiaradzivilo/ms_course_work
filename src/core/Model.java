@@ -12,6 +12,7 @@ public class Model {
     protected int nearestEvent;
     protected int modelingTime;
 
+
     public Model(Element... elements) {
         this.elements = new ArrayList<>(Arrays.asList(elements));
         tnext = 0.0;
@@ -28,7 +29,8 @@ public class Model {
         this.modelingTime = modelingTime;
     }
 
-    public void simulate() {
+
+    public double simulate() {
         boolean isFirstIteration = true;
 
         while (tcurr < modelingTime) {
@@ -40,7 +42,7 @@ public class Model {
                 }
             }
             updateBlockedElements();
-            System.out.println("\nEvent in " + elements.get(nearestEvent).getName() + ", tnext = " + tnext);
+//            System.out.println("\nEvent in " + elements.get(nearestEvent).getName() + ", tnext = " + tnext);
             var delta = tnext - tcurr;
             for (Element element : elements) {
                 element.doStatistics(delta);
@@ -58,7 +60,7 @@ public class Model {
             isFirstIteration = false;
             printInfo();
         }
-        printResult();
+        return printResult();
     }
 
     public void printInfo() {
@@ -67,9 +69,10 @@ public class Model {
         }
     }
 
-    public void printResult() {
+    public double printResult() {
         NumberFormat formatter = new DecimalFormat("#0.0000");
         System.out.println("\n-------------RESULTS-------------");
+        double meanTimeInSystem = 0;
         for (var element : elements) {
             element.printResult();
             if (element instanceof Process p) {
@@ -79,7 +82,14 @@ public class Model {
                 System.out.println("Failure Probability = " + formatter.format(p.getFailures() / (double) (p.getQuantity() + p.getFailures())));
                 System.out.println("_______________________________");
             }
+            if (element instanceof Dispose dispose) {
+                meanTimeInSystem = dispose.getProcessedJobs().stream()
+                        .mapToDouble(job -> job.getTimeOut() - job.getTimeIn())
+                        .average()
+                        .orElse(0.0);
+            }
         }
+        return meanTimeInSystem;
     }
 
     private void updateBlockedElements() {
@@ -90,57 +100,5 @@ public class Model {
         }
     }
 
-
-    public double calculateTransientPeriod(double epsilon) {
-        double[] cumulativeTime = new double[elements.size()];
-        double[] cumulativeResponse = new double[elements.size()];
-        double[] meanResponse = new double[elements.size()];
-
-        double totalTime = 0.0;
-        double tnext;
-        double tcurr = 0.0;
-
-        while (tcurr < modelingTime) {
-            tnext = Double.MAX_VALUE;
-
-
-            for (Element element : elements) {
-                if (element.getTnext() < tnext) {
-                    tnext = element.getTnext();
-                }
-            }
-
-            double delta = tnext - tcurr;
-            tcurr = tnext;
-            totalTime += delta;
-
-
-            for (int i = 0; i < elements.size(); i++) {
-                Element element = elements.get(i);
-                if (element instanceof Process process) {
-                    cumulativeTime[i] += delta;
-                    cumulativeResponse[i] += process.getQueueSize() * delta;
-                    meanResponse[i] = cumulativeResponse[i] / cumulativeTime[i];
-                }
-            }
-
-
-            for (int i = 0; i < meanResponse.length; i++) {
-                for (int j = i + 1; j < meanResponse.length; j++) {
-                    if (Math.abs(meanResponse[i] - meanResponse[j]) < epsilon) {
-                        return tcurr;
-                    }
-                }
-            }
-
-            for (Element element : elements) {
-                if (element.getTnext() == tcurr) {
-                    element.outAct();
-                }
-            }
-        }
-
-        return -1;
-    }
 
 }

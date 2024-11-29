@@ -80,6 +80,10 @@ public class Element {
         return probabilities;
     }
 
+    public static void setNextId(int nextId) {
+        Element.nextId = nextId;
+    }
+
     public void setRouting(Routing routing) {
         this.routing = routing;
     }

@@ -3,6 +3,11 @@ import core.*;
 
 public class Main {
     public static void main(String[] args) {
+
+    }
+
+
+    public static double model(int modelingTime) {
         Create create = new Create("Request creator", 10, 3, 0);
         Process processingComp1 = new Process("Request processing on computer 1", 2, 1, Distribution.NONE);
         Process searchComp1 = new Process("Search on computer 1", 18, 2, 1);
@@ -27,7 +32,7 @@ public class Main {
         searchComp2.addRoutes(new Route(transportationBack));
         transportationBack.addRoutes(new Route(dispose));
 
-        Model model = new Model(1000000, create,
+        Model model = new Model(modelingTime, create,
                 processingComp1,
                 searchComp1,
                 transportation,
@@ -35,18 +40,7 @@ public class Main {
                 transportationBack,
                 dispose);
 
-        // Виконання моделювання
-        model.simulate();
-
-//        // Обчислення перехідного періоду
-//        double epsilon = 0.01;
-//        double transientPeriod = model.calculateTransientPeriod(epsilon);
-//
-//        if (transientPeriod > 0) {
-//            System.out.println("Перехідний період закінчується на моменті часу T = " + transientPeriod);
-//        } else {
-//            System.out.println("Сталий стан системи не досягається протягом заданого часу моделювання.");
-//        }
+        return model.simulate();
     }
 
 

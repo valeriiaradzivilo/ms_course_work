@@ -27,6 +27,7 @@ public class Main {
                 new Route(dispose, 0.5, 0)
         );
         searchComp1.setRouting(Routing.BY_PROBABILITY);
+
         transportation.addRoutes(
                 new Route(searchComp2)
         );
@@ -47,7 +48,7 @@ public class Main {
                 transportationBack,
                 dispose);
 
-        model.simulate(1000);
+        model.simulate(10000);
 
 
     }

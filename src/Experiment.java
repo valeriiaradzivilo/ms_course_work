@@ -15,18 +15,17 @@ public class Experiment {
     public static void main(String[] args) {
 //        getMeanStandDevVariance(50);
 //        getMeanTimeInSystemStatistics();
-//        getListTimeInSystem();
+        getLawOfDistributionData();
 //        timeAnalyse();
-        analyseRequestIntensity();
+//        analyseRequestIntensity();
     }
 
 
-    private static void getListTimeInSystem() {
-
+    private static void getLawOfDistributionData() {
         Element.setNextId(0);
         Model model = Main.createModel(100_000);
         model.simulate();
-        saveDataToCSV("timeInSystemWithRandom.csv", model.getTimeInSystem());
+        saveDataToCSV("lawOfDistribution.csv", model.getTimeInSystem());
 
     }
 
@@ -143,7 +142,7 @@ public class Experiment {
             double mean = sum / timeInAllIterations.size();
             meanTime.add(mean);
         }
-        saveIntensityDataToCSV("intensity_vs_time.csv", intensities, meanTime);
+        saveIntensityDataToCSV("intensityVsTime.csv", intensities, meanTime);
     }
 
     private static void saveIntensityDataToCSV(String filename, List<Integer> intensities, List<Double> meanTime) {

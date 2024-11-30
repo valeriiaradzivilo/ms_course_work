@@ -6,14 +6,14 @@ import java.util.*;
 
 public class Model {
     protected final ArrayList<Element> elements;
+    private final List<Double> timeInSystem = new ArrayList<>();
     protected double tcurr;
     protected double tnext;
     protected int nearestEvent;
     protected int modelingTime;
-
-
+    // Statistics and experiments
     protected Map<Double, Double> meanTimeInSystemStatistics = new HashMap<>();
-    private List<Double> timeInSystem = new ArrayList<>();
+    private double meanTimeInSystem = 0;
 
 
     public Model(Element... elements) {
@@ -33,7 +33,7 @@ public class Model {
     }
 
 
-    public double simulate() {
+    public void simulate() {
         boolean isFirstIteration = true;
 
         while (tcurr < modelingTime) {
@@ -63,7 +63,7 @@ public class Model {
             isFirstIteration = false;
             printInfo();
         }
-        return printResult();
+        printResult();
     }
 
     public void printInfo() {
@@ -85,10 +85,10 @@ public class Model {
         }
     }
 
-    public double printResult() {
+    public void printResult() {
         NumberFormat formatter = new DecimalFormat("#0.0000");
         System.out.println("\n-------------RESULTS-------------");
-        double meanTimeInSystem = 0;
+
         for (var element : elements) {
             element.printResult();
             if (element instanceof Process p) {
@@ -110,7 +110,7 @@ public class Model {
 
             }
         }
-        return meanTimeInSystem;
+
     }
 
     private void updateBlockedElements() {
@@ -125,8 +125,12 @@ public class Model {
         return meanTimeInSystemStatistics;
     }
 
-    public List<Double> getTimeInSystem() {
+    public List<Double> getTimeInSystemForEachProcess() {
         return timeInSystem;
+    }
+
+    public double getMeanTimeInSystem() {
+        return meanTimeInSystem;
     }
 
 

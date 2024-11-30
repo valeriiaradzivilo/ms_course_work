@@ -16,23 +16,23 @@ public class Experiment {
 //        getMeanStandDevVariance(50);
 //        getMeanTimeInSystemStatistics();
 //        getListTimeInSystem();
-        timeAnalyse();
+//        meanAndStdevTimeAnalyse();
     }
 
 
     private static void getListTimeInSystem() {
 
         Element.setNextId(0);
-        Model model = Main.createModel(100_000);
+        Model model = Main.createModelForTask(100_000);
         model.simulate();
-        saveDataToCSV("timeInSystemWithRandom.csv", model.getTimeInSystem());
+        saveDataToCSV("timeInSystemWithRandom.csv", model.getTimeInSystemForEachProcess());
 
     }
 
     private static void getMeanTimeInSystemStatistics() {
         for (int i = 0; i < 3; i++) {
             Element.setNextId(0);
-            Model model = Main.createModel(100_000);
+            Model model = Main.createModelForTask(100_000);
             model.simulate();
             saveDataToCSV("meanTimeInSystem" + i + ".csv", model.getMeanTimeInSystemStatistics());
         }
@@ -98,18 +98,18 @@ public class Experiment {
         }
     }
 
-    private static void timeAnalyse() {
+    private static void meanAndStdevTimeAnalyse() {
         NumberFormat formatter = new DecimalFormat("#0.0000");
         Element.setNextId(0);
-        Model model = Main.createModel(50_000);
+        Model model = Main.createModelForTask(50_000);
         model.simulate();
-        List<Double> timeInSystemForEachRequest = model.getTimeInSystem();
+        List<Double> timeInSystemForEachRequest = model.getTimeInSystemForEachProcess();
 
         double sum = timeInSystemForEachRequest.stream().mapToDouble(Double::doubleValue).sum();
         double mean = sum / timeInSystemForEachRequest.size();
         double variance = 0.0;
         double standartDeviation = 0.0;
-        
+
         for (Double aDouble : timeInSystemForEachRequest) {
             variance += Math.pow(aDouble - mean, 2);
         }

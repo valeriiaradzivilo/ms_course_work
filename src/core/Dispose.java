@@ -24,4 +24,4 @@ public class Dispose extends Element {
     public ArrayList<Job> getProcessedJobs() {
         return processedJobs;
     }
- }
+}

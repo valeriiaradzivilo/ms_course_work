@@ -79,10 +79,7 @@ public class Model {
 
                     meanTimeInSystemStatistics.put(tcurr, meanTimeInSystem);
                 }
-                timeInSystem.add(dispose.getProcessedJobs().stream()
-                        .mapToDouble(job -> job.getTimeOut() - job.getTimeIn())
-                        .sum()
-                );
+
             }
 
         }
@@ -106,6 +103,11 @@ public class Model {
                         .mapToDouble(job -> job.getTimeOut() - job.getTimeIn())
                         .average()
                         .orElse(0.0);
+
+                for (var job : dispose.getProcessedJobs()) {
+                    timeInSystem.add(job.getTimeOut() - job.getTimeIn());
+                }
+
             }
         }
         return meanTimeInSystem;

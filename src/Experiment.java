@@ -3,6 +3,8 @@ import core.Model;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,8 @@ public class Experiment {
     public static void main(String[] args) {
 //        getMeanStandDevVariance(50);
 //        getMeanTimeInSystemStatistics();
-        getListTimeInSystem();
+//        getListTimeInSystem();
+        timeAnalyse();
     }
 
 
@@ -23,11 +26,6 @@ public class Experiment {
         Model model = Main.createModel(100_000);
         model.simulate();
         saveDataToCSV("timeInSystemWithRandom.csv", model.getTimeInSystem());
-
-        Element.setNextId(0);
-        Model modelWithoutRandom = Main.createModelWithoutRandom(100_000);
-        modelWithoutRandom.simulate();
-        saveDataToCSV("timeInSystemWithoutRandom.csv", modelWithoutRandom.getTimeInSystem());
 
     }
 
@@ -98,5 +96,28 @@ public class Experiment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void timeAnalyse() {
+        NumberFormat formatter = new DecimalFormat("#0.0000");
+        Element.setNextId(0);
+        Model model = Main.createModel(50_000);
+        model.simulate();
+        List<Double> timeInSystemForEachRequest = model.getTimeInSystem();
+
+        double sum = timeInSystemForEachRequest.stream().mapToDouble(Double::doubleValue).sum();
+        double mean = sum / timeInSystemForEachRequest.size();
+        double variance = 0.0;
+        double standartDeviation = 0.0;
+        
+        for (Double aDouble : timeInSystemForEachRequest) {
+            variance += Math.pow(aDouble - mean, 2);
+        }
+        variance = variance / timeInSystemForEachRequest.size();
+        standartDeviation = Math.sqrt(variance);
+        System.out.println("\n\n_______TIME IN SYSTEM CALCULATIONS_______");
+        System.out.println("Mean: " + formatter.format(mean));
+        System.out.println("Standart Deviation: " + formatter.format(standartDeviation));
+
     }
 }

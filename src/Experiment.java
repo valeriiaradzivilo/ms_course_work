@@ -16,7 +16,8 @@ public class Experiment {
 //        getMeanStandDevVariance(50);
 //        getMeanTimeInSystemStatistics();
 //        getListTimeInSystem();
-        timeAnalyse();
+//        timeAnalyse();
+        analyseRequestIntensity();
     }
 
 
@@ -109,7 +110,7 @@ public class Experiment {
         double mean = sum / timeInSystemForEachRequest.size();
         double variance = 0.0;
         double standartDeviation = 0.0;
-        
+
         for (Double aDouble : timeInSystemForEachRequest) {
             variance += Math.pow(aDouble - mean, 2);
         }
@@ -119,5 +120,43 @@ public class Experiment {
         System.out.println("Mean: " + formatter.format(mean));
         System.out.println("Standart Deviation: " + formatter.format(standartDeviation));
 
+    }
+
+
+    private static void analyseRequestIntensity() {
+        List<Integer> intensities = new ArrayList<>();
+        for (int i = 4; i < 20; i++) {
+            intensities.add(i);
+        }
+        ArrayList<Double> meanTime = new ArrayList<>();
+        for (int i : intensities) {
+            List<Double> timeInAllIterations = new ArrayList<>();
+            for (int j = 0; j < 10; j++) {
+                Element.setNextId(0);
+                Model m = Main.createModel(50_000, i);
+                m.simulate();
+                List<Double> timeInSystem = m.getTimeInSystem();
+                double time = timeInSystem.stream().mapToDouble(Double::doubleValue).average().orElse(0);
+                timeInAllIterations.add(time);
+            }
+            double sum = timeInAllIterations.stream().mapToDouble(Double::doubleValue).sum();
+            double mean = sum / timeInAllIterations.size();
+            meanTime.add(mean);
+        }
+        saveIntensityDataToCSV("intensity_vs_time.csv", intensities, meanTime);
+    }
+
+    private static void saveIntensityDataToCSV(String filename, List<Integer> intensities, List<Double> meanTime) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            writer.append("Intensity,MeanTime\n");
+            for (int i = 0; i < intensities.size(); i++) {
+                writer.append(intensities.get(i).toString())
+                        .append(",")
+                        .append(meanTime.get(i).toString())
+                        .append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

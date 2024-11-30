@@ -1,14 +1,27 @@
 import core.Element;
+import core.Model;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Experiment {
 
 
     public static void main(String[] args) {
-        getMeanStandDevVariance(50);
+//        getMeanStandDevVariance(50);
+        getMeanTimeInSystemStatistics();
+    }
+
+    private static void getMeanTimeInSystemStatistics() {
+        for (int i = 0; i < 3; i++) {
+            Element.setNextId(0);
+            Model model = Main.createModel(100_000);
+            model.simulate();
+            saveDataToCSV("meanTimeInSystem" + i + ".csv", model.getMeanTimeInSystemStatistics());
+        }
+
     }
 
     private static void getMeanStandDevVariance(int N) {
@@ -41,15 +54,16 @@ public class Experiment {
     }
 
 
-    private static void saveDataToCSV(String filename, ArrayList<Integer> sizes, ArrayList<Double> meanTimeInSystem) {
+    private static void saveDataToCSV(String filename, Map<Double, Double> meanTimeInSystem) {
         try (FileWriter writer = new FileWriter(filename)) {
-            writer.append("Size,MeanTimeInSystem\n");
-            for (int i = 0; i < sizes.size(); i++) {
-                writer.append(sizes.get(i).toString())
+            writer.append("Time,MeanTimeInSystem\n");
+            for (Map.Entry entry : meanTimeInSystem.entrySet()) {
+                writer.append(entry.getKey().toString())
                         .append(",")
-                        .append(meanTimeInSystem.get(i).toString())
+                        .append(entry.getValue().toString())
                         .append("\n");
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

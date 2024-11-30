@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Model {
     protected final ArrayList<Element> elements;
@@ -11,6 +13,9 @@ public class Model {
     protected double tnext;
     protected int nearestEvent;
     protected int modelingTime;
+
+
+    protected Map<Double, Double> meanTimeInSystemStatistics = new HashMap<>();
 
 
     public Model(Element... elements) {
@@ -64,8 +69,20 @@ public class Model {
     }
 
     public void printInfo() {
+
         for (var element : elements) {
             element.printInfo();
+            if (element instanceof Dispose dispose) {
+                if (Math.floor(tcurr) % 3 == 0) {
+                    double meanTimeInSystem = dispose.getProcessedJobs().stream()
+                            .mapToDouble(job -> job.getTimeOut() - job.getTimeIn())
+                            .average()
+                            .orElse(0.0);
+
+                    meanTimeInSystemStatistics.put(tcurr, meanTimeInSystem);
+                }
+            }
+
         }
     }
 
@@ -98,6 +115,10 @@ public class Model {
                 element.setTnext(tnext);
             }
         }
+    }
+
+    public Map<Double, Double> getMeanTimeInSystemStatistics() {
+        return meanTimeInSystemStatistics;
     }
 
 

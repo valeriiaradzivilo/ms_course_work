@@ -3,11 +3,15 @@ import core.*;
 
 public class Main {
     public static void main(String[] args) {
-
+        model(10_000);
     }
 
 
     public static double model(int modelingTime) {
+        return createModel(modelingTime).simulate();
+    }
+
+    public static Model createModel(int modelingTime) {
         Create create = new Create("Request creator", 10, 3, 0);
         Process processingComp1 = new Process("Request processing on computer 1", 2, 1, Distribution.NONE);
         Process searchComp1 = new Process("Search on computer 1", 18, 2, 1);
@@ -32,15 +36,13 @@ public class Main {
         searchComp2.addRoutes(new Route(transportationBack));
         transportationBack.addRoutes(new Route(dispose));
 
-        Model model = new Model(modelingTime, create,
+        return new Model(modelingTime, create,
                 processingComp1,
                 searchComp1,
                 transportation,
                 searchComp2,
                 transportationBack,
                 dispose);
-
-        return model.simulate();
     }
 
 

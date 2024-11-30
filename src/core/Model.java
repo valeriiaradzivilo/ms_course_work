@@ -2,10 +2,7 @@ package core;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Model {
     protected final ArrayList<Element> elements;
@@ -16,6 +13,7 @@ public class Model {
 
 
     protected Map<Double, Double> meanTimeInSystemStatistics = new HashMap<>();
+    private List<Double> timeInSystem = new ArrayList<>();
 
 
     public Model(Element... elements) {
@@ -81,6 +79,10 @@ public class Model {
 
                     meanTimeInSystemStatistics.put(tcurr, meanTimeInSystem);
                 }
+                timeInSystem.add(dispose.getProcessedJobs().stream()
+                        .mapToDouble(job -> job.getTimeOut() - job.getTimeIn())
+                        .sum()
+                );
             }
 
         }
@@ -119,6 +121,10 @@ public class Model {
 
     public Map<Double, Double> getMeanTimeInSystemStatistics() {
         return meanTimeInSystemStatistics;
+    }
+
+    public List<Double> getTimeInSystem() {
+        return timeInSystem;
     }
 
 

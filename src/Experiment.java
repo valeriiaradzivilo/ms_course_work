@@ -4,6 +4,7 @@ import core.Model;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Experiment {
@@ -11,7 +12,23 @@ public class Experiment {
 
     public static void main(String[] args) {
 //        getMeanStandDevVariance(50);
-        getMeanTimeInSystemStatistics();
+//        getMeanTimeInSystemStatistics();
+        getListTimeInSystem();
+    }
+
+
+    private static void getListTimeInSystem() {
+
+        Element.setNextId(0);
+        Model model = Main.createModel(100_000);
+        model.simulate();
+        saveDataToCSV("timeInSystemWithRandom.csv", model.getTimeInSystem());
+
+        Element.setNextId(0);
+        Model modelWithoutRandom = Main.createModelWithoutRandom(100_000);
+        modelWithoutRandom.simulate();
+        saveDataToCSV("timeInSystemWithoutRandom.csv", modelWithoutRandom.getTimeInSystem());
+
     }
 
     private static void getMeanTimeInSystemStatistics() {
@@ -61,6 +78,20 @@ public class Experiment {
                 writer.append(entry.getKey().toString())
                         .append(",")
                         .append(entry.getValue().toString())
+                        .append("\n");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static void saveDataToCSV(String filename, List<Double> data) {
+        try (FileWriter writer = new FileWriter(filename)) {
+            writer.append("TimeInSystem\n");
+            for (Double entry : data) {
+                writer.append(entry.toString())
                         .append("\n");
             }
 

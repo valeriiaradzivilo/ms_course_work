@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>core.Model</OriginalElement>
+  <nodes>
+    <node x="-2271.1139646869988" y="312.2550561797756">core.Model</node>
+    <node x="-1840.6556982343498" y="275.75425361155726">core.Route</node>
+    <node x="-1232.8398756666495" y="751.8457564205462">core.Process.Channel</node>
+    <node x="-1555.4502407704654" y="357.75425361155726">core.Route.Block</node>
+    <node x="-1624.4502407704654" y="723.6303571428576">core.Process</node>
+    <node x="-2284.085714285714" y="581.6428571428573">core.Element</node>
+    <node x="-1811.9422150882824" y="571.3520064205461">core.Create</node>
+    <node x="-1293.06619990421" y="326.72857142857174">core.Routing</node>
+    <node x="-1293.06619990421" y="468.91316729663964">core.Job</node>
+    <node x="-1317.251066639052" y="1222.6303571428575">core.FunRand</node>
+    <node x="-1840.6556982343498" y="1222.6303571428575">core.Dispose</node>
+    <node x="-1570.2176906423135" y="527.5582385561969">core.Distribution</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="core.Process" target="core.Element" relationship="GENERALIZATION">
+      <point x="-134.5" y="150.29085072231123" />
+      <point x="-1762.792857142857" y="1123.421207865169" />
+      <point x="-1762.792857142857" y="971.1428571428573" />
+      <point x="186.0" y="0.0" />
+    </edge>
+    <edge source="core.Route.Block" target="core.Route" relationship="INNER_CLASS">
+      <point x="-65.5" y="0.0" />
+      <point x="82.0" y="0.0" />
+    </edge>
+    <edge source="core.Create" target="core.Element" relationship="GENERALIZATION">
+      <point x="-73.78651685393265" y="0.0" />
+      <point x="-1732.4361155698234" y="613.8857142857146" />
+      <point x="186.0" y="-357.25714285714275" />
+    </edge>
+    <edge source="core.Process.Channel" target="core.Process" relationship="INNER_CLASS">
+      <point x="-81.5" y="0.0" />
+      <point x="-1288.6699378333246" y="820.8520064205461" />
+      <point x="-1288.6699378333246" y="973.1303571428576" />
+      <point x="134.5" y="0.0" />
+    </edge>
+    <edge source="core.Dispose" target="core.Element" relationship="GENERALIZATION">
+      <point x="-102.5" y="0.0" />
+      <point x="186.0" y="320.4937500000001" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.5632911392405063" showDependencies="false" x="-1676.9999999999998" y="818.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

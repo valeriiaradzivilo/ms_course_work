@@ -15,6 +15,9 @@ def chi_squared_test(observed_frequencies, expected_densities, sample_size, degr
     return chi_squared_value, chi_squared_critical_value
 
 def check_distribution(distribution_name, observed_frequencies, expected_densities, sample_size, degrees_of_freedom):
+    if degrees_of_freedom < 1:
+        print(f'Too few degrees of freedom for {distribution_name} distribution, test cannot be performed')
+        return
     chi_squared_value, chi_squared_critical_value = chi_squared_test(observed_frequencies, expected_densities, sample_size, degrees_of_freedom)
     print(f'Chi-squared value: {chi_squared_value}\nCritical value: {chi_squared_critical_value}')
     if chi_squared_value < chi_squared_critical_value:
@@ -99,20 +102,16 @@ def task1(data_sample):
     check_distribution(distribution_name, merged_frequencies, expected_densities, data_sample.size, degrees_of_freedom)
     
     distribution_name = 'uniform'
-    find_mean_and_variance(data_sample)
+    sample_mean, sample_variance = find_mean_and_variance(data_sample)
     intervals, frequencies = get_frequency_table(data_sample)
     merged_intervals, merged_frequencies = merge_intervals(intervals, frequencies)
     expected_densities = []
-    for i in range(len(intervals) - 1):
-        expected_densities.append(
-            uniform.cdf(intervals[i + 1], loc=0, scale=1) - uniform.cdf(intervals[i], loc=0, scale=1)
-        )
-    build_histogram(data_sample, intervals, expected_densities, intervals, distribution_name)
-    expected_densities = []
     for i in range(len(merged_intervals) - 1):
         expected_densities.append(
-            uniform.cdf(merged_intervals[i + 1], loc=0, scale=1) - uniform.cdf(merged_intervals[i], loc=0, scale=1)
+            uniform.cdf(merged_intervals[i + 1], loc=min(data_sample), scale=max(data_sample) - min(data_sample)) -
+            uniform.cdf(merged_intervals[i], loc=min(data_sample), scale=max(data_sample) - min(data_sample))
         )
+    build_histogram(data_sample, intervals, expected_densities, merged_intervals, distribution_name)
     degrees_of_freedom = len(merged_frequencies) - 1 - 2
     if degrees_of_freedom < 0:
         print('Too few degrees of freedom, test cannot be performed')

@@ -25,7 +25,7 @@ public class Experiment {
         Element.setNextId(0);
         Model model = Main.createModelForTask(100_000);
         model.simulate();
-        saveDataToCSV("timeInSystemWithRandom.csv", model.getTimeInSystemForEachProcess());
+        saveDataToCSV("timeInSystem.csv", model.getTimeInSystemForEachProcess());
 
     }
 

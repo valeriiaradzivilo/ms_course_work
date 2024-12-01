@@ -32,7 +32,7 @@ public class Experiment {
     private static void getMeanTimeInSystemStatistics() {
         for (int i = 0; i < 3; i++) {
             Element.setNextId(0);
-            Model model = Main.createModelForTask(100_000);
+            Model model = Main.createModelForTask(10_000);
             model.simulate();
             saveDataToCSV("meanTimeInSystem" + i + ".csv", model.getMeanTimeInSystemStatistics());
         }

@@ -15,24 +15,24 @@ public class Experiment {
     public static void main(String[] args) {
 //        getMeanStandDevVariance(50);
 //        getMeanTimeInSystemStatistics();
-        getLawOfDistributionData();
-//        timeAnalyse();
-//        analyseRequestIntensity();
+//        getListTimeInSystem();
+//        meanAndStdevTimeAnalyse();
     }
 
 
-    private static void getLawOfDistributionData() {
+    private static void getListTimeInSystem() {
+
         Element.setNextId(0);
-        Model model = Main.createModel(100_000);
+        Model model = Main.createModelForTask(100_000);
         model.simulate();
-        saveDataToCSV("lawOfDistribution.csv", model.getTimeInSystem());
+        saveDataToCSV("timeInSystem.csv", model.getTimeInSystemForEachProcess());
 
     }
 
     private static void getMeanTimeInSystemStatistics() {
         for (int i = 0; i < 3; i++) {
             Element.setNextId(0);
-            Model model = Main.createModel(100_000);
+            Model model = Main.createModelForTask(10_000);
             model.simulate();
             saveDataToCSV("meanTimeInSystem" + i + ".csv", model.getMeanTimeInSystemStatistics());
         }
@@ -98,12 +98,12 @@ public class Experiment {
         }
     }
 
-    private static void timeAnalyse() {
+    private static void meanAndStdevTimeAnalyse() {
         NumberFormat formatter = new DecimalFormat("#0.0000");
         Element.setNextId(0);
-        Model model = Main.createModel(50_000);
+        Model model = Main.createModelForTask(50_000);
         model.simulate();
-        List<Double> timeInSystemForEachRequest = model.getTimeInSystem();
+        List<Double> timeInSystemForEachRequest = model.getTimeInSystemForEachProcess();
 
         double sum = timeInSystemForEachRequest.stream().mapToDouble(Double::doubleValue).sum();
         double mean = sum / timeInSystemForEachRequest.size();
@@ -119,43 +119,5 @@ public class Experiment {
         System.out.println("Mean: " + formatter.format(mean));
         System.out.println("Standart Deviation: " + formatter.format(standartDeviation));
 
-    }
-
-
-    private static void analyseRequestIntensity() {
-        List<Integer> intensities = new ArrayList<>();
-        for (int i = 4; i < 20; i++) {
-            intensities.add(i);
-        }
-        ArrayList<Double> meanTime = new ArrayList<>();
-        for (int i : intensities) {
-            List<Double> timeInAllIterations = new ArrayList<>();
-            for (int j = 0; j < 10; j++) {
-                Element.setNextId(0);
-                Model m = Main.createModel(50_000, i);
-                m.simulate();
-                List<Double> timeInSystem = m.getTimeInSystem();
-                double time = timeInSystem.stream().mapToDouble(Double::doubleValue).average().orElse(0);
-                timeInAllIterations.add(time);
-            }
-            double sum = timeInAllIterations.stream().mapToDouble(Double::doubleValue).sum();
-            double mean = sum / timeInAllIterations.size();
-            meanTime.add(mean);
-        }
-        saveIntensityDataToCSV("intensityVsTime.csv", intensities, meanTime);
-    }
-
-    private static void saveIntensityDataToCSV(String filename, List<Integer> intensities, List<Double> meanTime) {
-        try (FileWriter writer = new FileWriter(filename)) {
-            writer.append("Intensity,MeanTime\n");
-            for (int i = 0; i < intensities.size(); i++) {
-                writer.append(intensities.get(i).toString())
-                        .append(",")
-                        .append(meanTime.get(i).toString())
-                        .append("\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -6,12 +6,13 @@ public class Main {
         model(10_000);
     }
 
-
     public static double model(int modelingTime) {
-        return createModel(modelingTime).simulate();
+        Model model = createModelForTask(modelingTime);
+        model.simulate();
+        return model.getMeanTimeInSystem();
     }
 
-    public static Model createModel(int modelingTime) {
+    public static Model createModelForTask(int modelingTime) {
         Create create = new Create("Request creator", 10, 3, 0);
         Process processingComp1 = new Process("Request processing on computer 1", 2, 1, Distribution.NONE);
         Process searchComp1 = new Process("Search on computer 1", 18, 2, 1);
@@ -44,6 +45,7 @@ public class Main {
                 transportationBack,
                 dispose);
     }
+
 
     public static Model createModel(int modelingTime, int requestIntensity) {
         Create create = new Create("Request creator", requestIntensity, 3, 0);

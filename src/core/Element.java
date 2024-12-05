@@ -59,15 +59,6 @@ public class Element {
         nextId++;
     }
 
-    private static ArrayList<Route> getUnblockedRoutes(ArrayList<Route> routes, Job routedJob) {
-        var unblockedRoutes = new ArrayList<Route>();
-        for (var route : routes) {
-            if (!route.isBlocked(routedJob)) {
-                unblockedRoutes.add(route);
-            }
-        }
-        return unblockedRoutes;
-    }
 
     private static double[] getScaledProbabilities(ArrayList<Route> routes) {
         var probabilities = new double[routes.size()];
@@ -130,14 +121,13 @@ public class Element {
             return new Route(null);
         }
         return switch (routing) {
-            case BY_PROBABILITY -> getNextRouteByProbability(routedJob);
-            case BY_PRIORITY -> getNextRouteByPriority(routedJob);
-            case COMBINED -> getNextRouteCombined(routedJob);
+            case BY_PROBABILITY -> getNextRouteByProbability();
+            case BY_PRIORITY -> getNextRouteByPriority();
         };
     }
 
-    private Route getNextRouteByProbability(Job routedJob) {
-        var unblockedRoutes = getUnblockedRoutes(routes, routedJob);
+    private Route getNextRouteByProbability() {
+        var unblockedRoutes = routes;
         if (unblockedRoutes.isEmpty()) {
             return routes.get(0);
         }
@@ -151,38 +141,14 @@ public class Element {
         return unblockedRoutes.get(unblockedRoutes.size() - 1);
     }
 
-    private Route getNextRouteByPriority(Job routedJob) {
-        var unblockedRoutes = getUnblockedRoutes(routes, routedJob);
+    private Route getNextRouteByPriority() {
+        var unblockedRoutes = routes;
         if (unblockedRoutes.isEmpty()) {
-            return routes.get(0);
+            return routes.getFirst();
         }
-        return unblockedRoutes.get(0);
+        return unblockedRoutes.getFirst();
     }
-
-    private Route getNextRouteCombined(Job routedJob) {
-        Route selectedRoute = null;
-        for (var route : routes) {
-            if (!route.isBlocked(routedJob)) {
-                selectedRoute = route;
-                break;
-            }
-        }
-        if (selectedRoute == null) {
-            return routes.get(0);
-        }
-
-        var samePriorityRoutes = findRoutesByPriority(selectedRoute.getPriority());
-        var probability = Math.random();
-        var scaledProbabilities = getScaledProbabilities(samePriorityRoutes);
-        for (int i = 0; i < scaledProbabilities.length; i++) {
-            if (probability < scaledProbabilities[i]) {
-                selectedRoute = samePriorityRoutes.get(i);
-                break;
-            }
-        }
-        return selectedRoute;
-    }
-
+    
     private ArrayList<Route> findRoutesByPriority(int priority) {
         var routesByPriority = new ArrayList<Route>();
         for (var route : routes) {

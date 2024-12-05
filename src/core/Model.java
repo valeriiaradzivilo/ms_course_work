@@ -16,14 +16,6 @@ public class Model {
     private List<Double> timeInSystem = new ArrayList<>();
 
 
-    public Model(Element... elements) {
-        this.elements = new ArrayList<>(Arrays.asList(elements));
-        tnext = 0.0;
-        tcurr = tnext;
-        nearestEvent = 0;
-        modelingTime = 0;
-    }
-
     public Model(int modelingTime, Element... elements) {
         this.elements = new ArrayList<>(Arrays.asList(elements));
         tnext = 0.0;

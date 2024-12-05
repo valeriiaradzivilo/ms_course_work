@@ -4,44 +4,15 @@ public class Route {
     private final Element element;
     private int priority = 0;
     private double probability = 1.0;
-    private Block block = null;
 
     public Route(Element element) {
         this.element = element;
-    }
-
-    public Route(Element element, Block block) {
-        this.element = element;
-        this.block = block;
-    }
-
-    public Route(Element element, double probability) {
-        this.element = element;
-        this.probability = probability;
     }
 
     public Route(Element element, double probability, int priority) {
         this.element = element;
         this.probability = probability;
         this.priority = priority;
-    }
-
-    public Route(Element element, double probability, int priority, Block block) {
-        this.element = element;
-        this.probability = probability;
-        this.priority = priority;
-        this.block = block;
-    }
-
-    public boolean isBlocked(Job job) {
-        if (block == null) {
-            return false;
-        }
-        try {
-            return block.call(job);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public Element getElement() {
@@ -54,13 +25,5 @@ public class Route {
 
     public double getProbability() {
         return probability;
-    }
-
-    public void setBlock(Block block) {
-        this.block = block;
-    }
-    
-    public interface Block {
-        Boolean call(Job job);
     }
 }

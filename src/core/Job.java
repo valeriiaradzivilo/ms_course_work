@@ -13,10 +13,6 @@ public class Job {
         nextId++;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public double getTimeIn() {
         return timeIn;
     }

@@ -2,17 +2,7 @@ package core;
 
 public class Create extends Element {
     private int failures = 0;
-
-    public Create(String name, double delay) {
-        super(name, delay);
-        super.setTnext(0.0);
-    }
-
-    public Create(String name, double delay, double initialTNext) {
-        super(name, delay);
-        super.setTnext(initialTNext);
-    }
-
+    
     public Create(String name, double delay, double delayDev, double initialTNext) {
         super(name, delay, delayDev);
         super.setTnext(initialTNext);
@@ -24,7 +14,7 @@ public class Create extends Element {
         super.setTnext(super.getTcurr() + super.getDelay());
         var createdJob = createJob();
         var nextRoute = super.getNextRoute(createdJob);
-        if (nextRoute.getElement() == null || nextRoute.isBlocked(createdJob)) {
+        if (nextRoute.getElement() == null) {
             failures++;
         } else {
             nextRoute.getElement().inAct(createdJob);

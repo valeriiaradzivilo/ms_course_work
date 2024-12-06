@@ -11,6 +11,7 @@ public class Model {
     protected double tnext;
     protected int nearestEvent;
     protected int modelingTime;
+
     // Statistics and experiments
     protected Map<Double, Double> meanTimeInSystemStatistics = new HashMap<>();
     private double meanTimeInSystem = 0;
@@ -63,14 +64,11 @@ public class Model {
         for (var element : elements) {
             element.printInfo();
             if (element instanceof Dispose dispose) {
-                if (Math.floor(tcurr) % 3 == 0) {
-                    double meanTimeInSystem = dispose.getProcessedJobs().stream()
-                            .mapToDouble(job -> job.getTimeOut() - job.getTimeIn())
-                            .average()
-                            .orElse(0.0);
 
-                    meanTimeInSystemStatistics.put(tcurr, meanTimeInSystem);
-                }
+                double meanTimeInSystem = dispose.getProcessedJobs().stream().mapToDouble(job -> job.getTimeOut() - job.getTimeIn()).average().orElse(0.0);
+
+                meanTimeInSystemStatistics.put(tcurr, meanTimeInSystem);
+
 
             }
 
@@ -91,10 +89,7 @@ public class Model {
                 System.out.println("_______________________________");
             }
             if (element instanceof Dispose dispose) {
-                meanTimeInSystem = dispose.getProcessedJobs().stream()
-                        .mapToDouble(job -> job.getTimeOut() - job.getTimeIn())
-                        .average()
-                        .orElse(0.0);
+                meanTimeInSystem = dispose.getProcessedJobs().stream().mapToDouble(job -> job.getTimeOut() - job.getTimeIn()).average().orElse(0.0);
 
                 for (var job : dispose.getProcessedJobs()) {
                     timeInSystem.add(job.getTimeOut() - job.getTimeIn());

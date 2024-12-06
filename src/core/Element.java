@@ -127,36 +127,22 @@ public class Element {
     }
 
     private Route getNextRouteByProbability() {
-        var unblockedRoutes = routes;
-        if (unblockedRoutes.isEmpty()) {
-            return routes.get(0);
-        }
         var probability = Math.random();
-        var scaledProbabilities = getScaledProbabilities(unblockedRoutes);
+        var scaledProbabilities = getScaledProbabilities(routes);
         for (int i = 0; i < scaledProbabilities.length; i++) {
             if (probability < scaledProbabilities[i]) {
-                return unblockedRoutes.get(i);
+                return routes.get(i);
             }
         }
-        return unblockedRoutes.get(unblockedRoutes.size() - 1);
+        return routes.get(routes.size() - 1);
     }
 
     private Route getNextRouteByPriority() {
         var unblockedRoutes = routes;
         if (unblockedRoutes.isEmpty()) {
-            return routes.getFirst();
+            return routes.get(0);
         }
-        return unblockedRoutes.getFirst();
-    }
-    
-    private ArrayList<Route> findRoutesByPriority(int priority) {
-        var routesByPriority = new ArrayList<Route>();
-        for (var route : routes) {
-            if (route.getPriority() == priority) {
-                routesByPriority.add(route);
-            }
-        }
-        return routesByPriority;
+        return unblockedRoutes.get(0);
     }
 
     public void addRoutes(Route... routes) {

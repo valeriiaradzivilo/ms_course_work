@@ -126,11 +126,7 @@ public class Element {
     }
 
     private Route getNextRouteByPriority() {
-        var unblockedRoutes = routes;
-        if (unblockedRoutes.isEmpty()) {
-            return routes.get(0);
-        }
-        return unblockedRoutes.get(0);
+        return routes.get(0);
     }
 
     public void addRoutes(Route... routes) {

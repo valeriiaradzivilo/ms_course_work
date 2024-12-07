@@ -28,16 +28,6 @@ public class Element {
         nextId++;
     }
 
-    public Element(String name, double delayMean) {
-        this.name = name;
-        tnext = 0.0;
-        tcurr = tnext;
-        this.delayMean = delayMean;
-        distribution = Distribution.EXPONENTIAL;
-        id = nextId;
-        nextId++;
-    }
-
     public Element(String name, double delayMean, double delayDev) {
         this.name = name;
         tnext = 0.0;
@@ -81,8 +71,6 @@ public class Element {
 
     public double getDelay() {
         return switch (distribution) {
-            case EXPONENTIAL -> FunRand.Exponential(delayMean);
-            case UNIFORM -> FunRand.Uniform(delayMean, delayDev);
             case NORMAL -> FunRand.Normal(delayMean, delayDev);
             default -> delayMean;
         };
